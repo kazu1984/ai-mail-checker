@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     apiKey: process.env.OPENAI_API_KEY!,
   });
 
-  const body = await req.json(); // ✅ 1回だけ読み取る
+  const body = await req.json(); // ✅ 一度だけ読み込む
   console.log('📥 リクエスト body:', body);
 
   try {
