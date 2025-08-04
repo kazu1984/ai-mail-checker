@@ -2,15 +2,16 @@ import { NextResponse } from 'next/server';
 import { OpenAI } from 'openai';
 import { kanjiPairs } from '@/app/utils/kanjiPairs';
 
-
-
-console.log("🔑 OPENAI_API_KEY:", process.env.OPENAI_API_KEY);
-
 export async function POST(req: Request) {
 
+  console.log('✅ /api/check POST 呼び出し');
+
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY!,
   });
+
+  const body = await req.json();
+  console.log('📥 リクエスト body:', body);
 
   try {
     const body = await req.json();
@@ -98,8 +99,11 @@ ${message}
     const aiReply = response.choices[0]?.message?.content || 'AI応答が取得できませんでした。';
     return NextResponse.json({ result: yureWarning + aiReply });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ OpenAI API 呼び出し失敗:', error);
-    return NextResponse.json({ result: 'エラーが発生しました。' }, { status: 500 });
+    return NextResponse.json(
+      { result: `エラーが発生しました: ${error.message}` },
+      { status: 500 }
+    );
   }
 }
