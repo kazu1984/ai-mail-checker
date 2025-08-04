@@ -2,11 +2,16 @@ import { NextResponse } from 'next/server';
 import { OpenAI } from 'openai';
 import { kanjiPairs } from '@/app/utils/kanjiPairs';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+
+
+console.log("🔑 OPENAI_API_KEY:", process.env.OPENAI_API_KEY);
 
 export async function POST(req: Request) {
+
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
   try {
     const body = await req.json();
     const { message, tone, useSama } = body;
