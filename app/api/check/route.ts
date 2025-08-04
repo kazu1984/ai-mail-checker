@@ -3,18 +3,16 @@ import { OpenAI } from 'openai';
 import { kanjiPairs } from '@/app/utils/kanjiPairs';
 
 export async function POST(req: Request) {
-
   console.log('✅ /api/check POST 呼び出し');
 
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY!,
   });
 
-  const body = await req.json();
+  const body = await req.json(); // ✅ 1回だけ読み取る
   console.log('📥 リクエスト body:', body);
 
   try {
-    const body = await req.json();
     const { message, tone, useSama } = body;
 
     // 表記ゆれチェック（例：齋藤 vs 斉藤）
@@ -94,7 +92,6 @@ ${message}
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
     });
-
 
     const aiReply = response.choices[0]?.message?.content || 'AI応答が取得できませんでした。';
     return NextResponse.json({ result: yureWarning + aiReply });
